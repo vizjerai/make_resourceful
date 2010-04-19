@@ -153,6 +153,31 @@ describe 'Resourceful::Default::Responses', ' for show_fails' do
   end
 end
 
+describe 'Resourceful::Default::Responses', ' for new_fails' do
+  include ControllerMocks
+  before :each do
+    mock_controller Resourceful::Default::Callbacks
+    create_builder
+    made_resourceful(Resourceful::Default::Responses)
+    @builder.apply
+  end
+
+  it "should give a 404 error for HTML" do
+    @controller.expects(:render).with(:text => "No item found", :status => 404)
+    @controller.scope(responses[:new_fails].find { |f, p| f == :html }[1]).call
+  end
+
+  it "should give a 404 error for JS" do
+    @controller.expects(:render).with(:text => "No item found", :status => 404)
+    @controller.scope(responses[:new_fails].find { |f, p| f == :js }[1]).call
+  end
+
+  it "should give a 404 error for XML" do
+    @controller.expects(:render).with(:text => "No item found", :status => 404)
+    @controller.scope(responses[:new_fails].find { |f, p| f == :xml }[1]).call
+  end
+end
+
 describe 'Resourceful::Default::Responses', ' for create' do
   include ControllerMocks
   before :each do
