@@ -270,6 +270,21 @@ describe Resourceful::Default::Actions, " edit action" do
   end
 end
 
+describe Resourceful::Default::Actions, " unsuccessful edit action" do
+  include ControllerMocks
+  before :each do
+    mock_controller Resourceful::Default::Actions
+    [:load_object, :before, :response_for].each(&@controller.method(:stubs))
+  end
+
+  after(:each) { @controller.edit }
+
+  it "should run the response for edit failing" do
+    @controller.stubs(:response_for).with(:edit).raises("Oh no!")
+    @controller.expects(:response_for).with(:edit_fails)
+  end
+end
+
 describe Resourceful::Default::Actions, " successful destroy action" do
   include ControllerMocks
   before :each do

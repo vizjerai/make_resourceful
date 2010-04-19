@@ -84,6 +84,8 @@ module Resourceful
         #load_object
         before :edit
         response_for :edit
+      rescue
+        response_for :edit_fails
       end
 
       # DELETE /foos/12
