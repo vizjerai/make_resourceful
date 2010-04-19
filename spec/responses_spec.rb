@@ -74,6 +74,31 @@ describe 'Resourceful::Default::Responses', ' for show' do
   end
 end
 
+describe 'Resourceful::Default::Responses', ' for show_fails' do
+  include ControllerMocks
+  before :each do
+    mock_controller Resourceful::Default::Callbacks
+    create_builder
+    made_resourceful(Resourceful::Default::Responses)
+    @builder.apply
+  end
+
+  it "should give a 404 error for HTML" do
+    @controller.expects(:render).with(:text => "No item found", :status => 404)
+    @controller.scope(responses[:show_fails].find { |f, p| f == :html }[1]).call
+  end
+
+  it "should give a 404 error for JS" do
+    @controller.expects(:render).with(:text => "No item found", :status => 404)
+    @controller.scope(responses[:show_fails].find { |f, p| f == :js }[1]).call
+  end
+
+  it "should give a 404 error for XML" do
+    @controller.expects(:render).with(:text => "No item found", :status => 404)
+    @controller.scope(responses[:show_fails].find { |f, p| f == :xml }[1]).call
+  end
+end
+
 describe 'Resourceful::Default::Responses', ' for index' do
   include ControllerMocks
   before :each do
@@ -125,31 +150,6 @@ describe 'Resourceful::Default::Responses', ' for new' do
 
   it "should have an empty JS response" do
     responses[:new].find { |f, p| f == :js }[1].call.should == nil
-  end
-end
-
-describe 'Resourceful::Default::Responses', ' for show_fails' do
-  include ControllerMocks
-  before :each do
-    mock_controller Resourceful::Default::Callbacks
-    create_builder
-    made_resourceful(Resourceful::Default::Responses)
-    @builder.apply
-  end
-
-  it "should give a 404 error for HTML" do
-    @controller.expects(:render).with(:text => "No item found", :status => 404)
-    @controller.scope(responses[:show_fails].find { |f, p| f == :html }[1]).call
-  end
-
-  it "should give a 404 error for JS" do
-    @controller.expects(:render).with(:text => "No item found", :status => 404)
-    @controller.scope(responses[:show_fails].find { |f, p| f == :js }[1]).call
-  end
-
-  it "should give a 404 error for XML" do
-    @controller.expects(:render).with(:text => "No item found", :status => 404)
-    @controller.scope(responses[:show_fails].find { |f, p| f == :xml }[1]).call
   end
 end
 
