@@ -75,6 +75,8 @@ module Resourceful
         load_object
         before :new
         response_for :new
+      rescue
+        response_for :new_fails
       end
 
       # GET /foos/12/edit

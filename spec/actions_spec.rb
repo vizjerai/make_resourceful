@@ -232,6 +232,22 @@ describe Resourceful::Default::Actions, " new action" do
   end
 end
 
+describe Resourceful::Default::Actions, " unsuccessful new action" do
+  include ControllerMocks
+  before :each do
+    mock_controller Resourceful::Default::Actions
+    [:build_object, :load_object,
+     :before, :response_for].each(&@controller.method(:stubs))
+  end
+
+  after(:each) { @controller.new }
+
+  it "should run the response for new failing" do
+    @controller.stubs(:response_for).with(:new).raises("Oh no!")
+    @controller.expects(:response_for).with(:new_fails)
+  end
+end
+
 describe Resourceful::Default::Actions, " edit action" do
   include ControllerMocks
   before :each do
